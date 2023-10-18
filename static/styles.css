@@ -48,6 +48,9 @@ body {
 .input-section {
     margin-top: 20px;
 }
+.white-text {
+    color: white;
+}
 
 .input-section input[type=text] {
     width: 100%;

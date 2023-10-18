@@ -13,43 +13,17 @@
     <form action="/upload" method="post" enctype="multipart/form-data">
       <div class="upload-btn-wrapper">
         <button class="btn"><span>CSV FILE UPLOAD</span></button>
-        <input type="file" name="csvFile">
-    </div>
-        <div class="input-section" id="input-section">
+        <input type="file" name="csvFile" id="csvFile"> <!-- Added id here -->
+        <span id="upload-message"></span> <!-- Added this line for the message -->
+      </div>
+      <div class="input-section" id="input-section">
           <input type="text" name="question1" placeholder="Drop Here">
       </div>
       <button type="button" id="add-question">Question+1</button>
       <button type="button" id="remove-question">Remove Question</button>
       <input type="submit" value="Submit">
-
     </form>
-</div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    let questionCounter = 2; // Starts from 2 because you already have one question by default
-
-    const inputSection = document.getElementById("input-section");
-    const addQuestionBtn = document.getElementById("add-question");
-    const removeQuestionBtn = document.getElementById("remove-question");
-
-    addQuestionBtn.addEventListener("click", () => {
-        const newInput = document.createElement("input");
-        newInput.setAttribute("type", "text");
-        newInput.setAttribute("name", `question${questionCounter}`);
-        newInput.setAttribute("placeholder", "Drop Here");
-        inputSection.appendChild(newInput);
-        questionCounter++;
-    });
-
-    removeQuestionBtn.addEventListener("click", () => {
-        if (inputSection.children.length > 1) { // Ensure we don't remove the first question
-            inputSection.lastChild.remove();
-            questionCounter--;
-        }
-    });
-});
-
-
-</script>
+  </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
