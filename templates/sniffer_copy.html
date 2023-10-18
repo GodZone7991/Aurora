@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sniffer</title>
+    <style>
+        /* Dark theme styles */
+        body {
+            background-color: black;
+            color: yellow;
+            font-family: 'Courier New', Courier, monospace; /* Terminal-like font */
+        }
+
+        input, select, textarea, button, a.btn {
+            background-color: #333333;
+            color: yellow;
+            border: 1px solid yellow;
+            text-decoration: none;
+            padding: 5px 10px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        input[type="submit"], button, a.btn {
+            background-color: #555555;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, button:hover, a.btn:hover {
+            background-color: #777777;
+        }
+        
+        progress {
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Description Section -->
+<div>
+    <p>This website aims to enrich the data you are collecting on a company using Generative Language models and Open AI.</p>
+    <p>The input table should include the following:</p>
+    
+    <!-- Table for Columns -->
+    <table border="1" style="width: 50%; margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th>Column Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Links</td>
+                <td>Link to the company</td>
+            </tr>
+            <tr>
+                <td>CEO's LinkedIn</td>
+                <td>Optional</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>The output is the enriched CSV file with the custom columns of your choice.</p>
+    <p><strong>Note:</strong> Right now, the prompts you are entering will be applying <span style="background-color: red; font-size: larger; border-radius: 5px; padding: 5px;">to <em>*ALL*</em></span> companies provided in the sheet.</p>
+</div>
+
+
+<form action="/sniffer" method="post" enctype="multipart/form-data" onsubmit="updateProgressBar()">
+    <label for="file">Upload CSV:</label>
+    <input type="file" id="file" name="file" accept=".csv" required>
+    <br><br>
+    <div id="promptSection">
+        <div class="promptItem">
+            <label for="prompt1">Prompt 1:</label>
+            <input type="text" name="prompt1" required>
+        </div>
+    </div>
+    <button type="button" onclick="addPrompt()">+ Add Prompt</button>
+    <br><br>
+    <input type="submit" value="Process">
+</form>
+
+<progress id="progressBar" value="0" max="100"></progress>
+
+{% if result %}
+    <h2>Results:</h2>
+    <p>{{ result }}</p>
+{% endif %}
+
+{% if file_ready %}
+    <a href="/download" class="btn" download>Download Enriched CSV</a>
+{% endif %}
+
+<!-- JavaScript to Poll for Progress -->
+<script>
+    // Function to update progress bar
+    function updateProgressBar() {
+        fetch('/progress')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('progressBar').value = data.progress;
+                if (data.progress < 100) {
+                    // If progress is less than 100, keep polling
+                    setTimeout(updateProgressBar, 1000);
+                }
+            });
+    }
+
+    // Start polling when the page loads
+    
+
+</script>
+
+<script>
+    function addPrompt() {
+    let promptCount = document.querySelectorAll('.promptItem').length + 1;
+    let newPromptDiv = document.createElement('div');
+    newPromptDiv.className = "promptItem";
+    
+    let label = document.createElement('label');
+    label.htmlFor = "prompt" + promptCount;
+    label.innerText = "Prompt " + promptCount + ":";
+    
+    let input = document.createElement('input');
+    input.type = "text";
+    input.name = "prompt" + promptCount;
+    input.required = true;
+    
+    newPromptDiv.appendChild(label);
+    newPromptDiv.appendChild(input);
+    
+    // Append the new prompt div inside the form element, just before the submit button
+    let form = document.querySelector('form');
+    let submitButton = document.querySelector('input[type="submit"]');
+    form.insertBefore(newPromptDiv, submitButton);
+}
+
+</script>
+
+</body>
+</html>
