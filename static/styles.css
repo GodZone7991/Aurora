@@ -62,7 +62,18 @@ body {
 button[type=button] {
     margin-top: 10px;
     margin-right: 5px;
+    margin-bottom: 20px;
 }
+
+
+  /* Style for the progress bar */
+  #progressBar {
+    display: none; /* Hide by default */
+    width: 100%;  /* Makes it as wide as the container */
+    height: 20px; /* Makes it thicker */
+    margin-bottom: 40px; /* Add margin at the bottom to create more distance */
+  }
+  
 
 input[type=submit] {
     margin-top: 20px;
@@ -78,3 +89,4 @@ input[type=submit] {
 input[type=submit]:hover {
     background: #45a049;
 }
+
