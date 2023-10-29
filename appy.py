@@ -71,8 +71,12 @@ def upload_file():
 
     # Create a dictionary to store results
     results_dict = {question: [] for question in questions}
-    llm = ChatOpenAI(openai_api_key='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',
-                        temperature=0, model_name="gpt-3.5-turbo-16k")
+
+    model_name_p = request.form.get('model_name')
+    temperature_p = float(request.form.get('temperature'))
+
+    llm = ChatOpenAI(openai_api_key='',
+                        temperature=temperature_p, model_name=model_name_p)
 
     for link in links:
         for question in questions:
